@@ -208,29 +208,36 @@ BAD_WORDS = {
 # Server & Web Configuration
 # ============================
 
-ON_HEROKU = 'DYNO' in environ
-APP_NAME = environ.get('APP_NAME', None) if ON_HEROKU else None
-BIND_ADDRESS = getenv('WEB_SERVER_BIND_ADDRESS', '0.0.0.0')
-FQDN = (
-    environ.get('FQDN', BIND_ADDRESS)
-    if not ON_HEROKU or environ.get('FQDN')
-    else f"{APP_NAME}.herokuapp.com"
-)
-FQDN = re.sub(r'^https?://', '', str(FQDN)).rstrip('/')
-NO_PORT = is_enabled(environ.get('NO_PORT'), False)
-HAS_SSL = is_enabled(getenv('HAS_SSL'), True)
+NO_PORT = bool(environ.get('NO_PORT', False))
 
-if HAS_SSL:
-    URL = f"https://{FQDN}/"
+# Not using Heroku on Render
+ON_HEROKU = False
+
+# Bind address for aiohttp
+BIND_ADRESS = str(getenv('WEB_SERVER_BIND_ADDRESS', '0.0.0.0'))
+
+# IMPORTANT: hostname only, no https://
+# Example default for your service:
+FQDN = str(getenv('FQDN', 'auto-filter-bot-a685.onrender.com'))
+
+# Base URL (Render does HTTPS with no custom port)
+if NO_PORT:
+URL = "https://{}/".format(FQDN)
 else:
-    URL = f"http://{FQDN}/" if NO_PORT else f"http://{FQDN}:{PORT}/"
-    
+URL = "https://{}/".format(FQDN)
+
 SLEEP_THRESHOLD = int(environ.get('SLEEP_THRESHOLD', '60'))
 WORKERS = int(environ.get('WORKERS', '4'))
 SESSION_NAME = str(environ.get('SESSION_NAME', 'dreamXBotz'))
 MULTI_CLIENT = False
 name = str(environ.get('name', 'DREAMXBOTZ'))
-PING_INTERVAL = int(environ.get("PING_INTERVAL", "298"))  # 5 minutes
+PING_INTERVAL = int(environ.get("PING_INTERVAL", "300")) # 20 minutes
+
+HAS_SSL = bool(getenv('HAS_SSL', True))
+if HAS_SSL:
+URL = "https://{}/".format(FQDN)
+else:
+URL = "http://{}/".format(FQDN)  # 5 minutes
 # ============================
 REACTIONS = ["🤝", "😇", "🤗", "😍", "👍", "🎅", "😐", "🥰", "🤩", "😱", "🤣", "😘", "👏", "😛", "😈", "🎉", "⚡️", "🫡", "🤓", "😎", "🏆", "🔥", "🤭", "🌚", "🆒", "👻", "😁"]
 
