@@ -207,7 +207,6 @@ BAD_WORDS = {
 # ============================
 # Server & Web Configuration
 # ============================
-
 NO_PORT = bool(environ.get('NO_PORT', False))
 
 # Not using Heroku on Render
@@ -222,9 +221,7 @@ FQDN = str(getenv('FQDN', 'auto-filter-bot-a685.onrender.com'))
 
 # Base URL (Render does HTTPS with no custom port)
 if NO_PORT:
-
 URL = "https://{}/".format(FQDN)
-
 else:
 URL = "https://{}/".format(FQDN)
 
@@ -233,15 +230,13 @@ WORKERS = int(environ.get('WORKERS', '4'))
 SESSION_NAME = str(environ.get('SESSION_NAME', 'dreamXBotz'))
 MULTI_CLIENT = False
 name = str(environ.get('name', 'DREAMXBOTZ'))
-PING_INTERVAL = int(environ.get("PING_INTERVAL", "300")) # 20 minutes
-
+PING_INTERVAL = int(environ.get("PING_INTERVAL", "300"))  # 20 minutes
 
 HAS_SSL = bool(getenv('HAS_SSL', True))
-
 if HAS_SSL:
 URL = "https://{}/".format(FQDN)
 else:
-URL = "http://{}/".format(FQDN)  # 5 minutes
+URL = "http://{}/".format(FQDN)
 # ============================
 REACTIONS = ["🤝", "😇", "🤗", "😍", "👍", "🎅", "😐", "🥰", "🤩", "😱", "🤣", "😘", "👏", "😛", "😈", "🎉", "⚡️", "🫡", "🤓", "😎", "🏆", "🔥", "🤭", "🌚", "🆒", "👻", "😁"]
 
